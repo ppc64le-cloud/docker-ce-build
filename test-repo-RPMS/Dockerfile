@@ -63,7 +63,7 @@ RUN set -eux; \
         popd; \
         chmod +x /usr/local/bin/test-launch.sh;
 
-ARG GO_VERSION=1.22.5
+ARG GO_VERSION=1.23.3
 
 RUN set -eux; \
     url="https://dl.google.com/go/${GO_VERSION}";\

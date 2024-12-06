@@ -27,7 +27,7 @@ COPY test-launch.sh /usr/local/bin/test-launch.sh
 
 RUN set -eux; \
     tar -xvzf bundles-*.tar.gz --wildcards  --strip-components 6 '*/RPMS/*' &&\
-    yum -y localinstall *.rpm && \
+    yum -y install *.rpm && \
     yum -y clean all
 
 ##
@@ -62,7 +62,7 @@ RUN set -eux; \
         popd; \
         chmod +x /usr/local/bin/test-launch.sh;
 
-ARG GO_VERSION=1.22.5
+ARG GO_VERSION=1.23.3
 
 RUN set -eux; \
     url="https://dl.google.com/go/${GO_VERSION}";\

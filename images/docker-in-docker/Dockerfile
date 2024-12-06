@@ -5,9 +5,9 @@
 
 FROM debian:bookworm
 
-ENV CONTAINERD_VERSION=1.6.32-1
+ENV CONTAINERD_VERSION=1.7.22-1
 
-ENV DOCKER_VERSION=27.0.3-1
+ENV DOCKER_VERSION=27.3.1-1
 
 WORKDIR /workspace
 RUN mkdir -p /workspace
@@ -35,7 +35,6 @@ RUN apt-get -y update && apt-get -y upgrade && apt-get install -y --no-install-r
     unzip \
     xz-utils \
     zip \
-    zlib1g-dev \
     iptables libdevmapper1.02.1 \
     && rm -rf /var/lib/apt/lists/*
 
@@ -83,6 +82,8 @@ curl https://raw.githubusercontent.com/docker-library/docker/${DOCKERD_COMMIT}/2
 chmod +x /usr/local/bin/dind; \
     chmod +x /usr/local/bin/dockerd-entrypoint.sh; \
 cp $(which tini) "/usr/local/bin/docker-init";
+
+RUN mkdir -p /etc/docker; touch /etc/docker/daemon.json; echo "{\"insecure-registries\" : [ \"registry:5000\" ]}" > /etc/docker/daemon.json;
 
 
 VOLUME /var/lib/docker
