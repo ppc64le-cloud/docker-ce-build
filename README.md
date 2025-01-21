@@ -24,7 +24,6 @@ For now, this process is semi-automated, since we still need to manually edit th
 This postsubmit prow job is triggered by the editing of the [env.list](https://github.com/ppc64le-cloud/docker-ce-build/blob/main/env/env.list). This file contains the information we need to build the packages : 
 - DOCKER_TAG : latest version of docker, that we want to build
 - DOCKER_PACKAGING_HASH : commit associated to the latest version of docker-packaging
-- DOCKER_CLI_HASH : commit associated to the latest version of docker CLI
 - CONTAINERD_BUILD : if set to 1, it means that a new containerd version has been released that we have not built it yet ; if set to 0, it means that we have already built it in a previous prow job and that we do not need to build it again (we will still verify that no new distribution has been added).
 - CONTAINERD_TAG : latest version of containerd
 - CONTAINERD_PACKAGING_HASH : commit associated to the latest version of containerd
