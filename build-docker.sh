@@ -136,7 +136,7 @@ patchGoVersion /workspace/docker-ce-packaging/rpm
 before=$SECONDS
 # 1) Build the list of distros
 # List of Distros that appear in the list though they are EOL or must not be built
-DisNo+=( "ubuntu-impish" "debian-buster" )
+DisNo+=( "ubuntu-impish" "debian-buster" "debian-bullseye" )
 for PACKTYPE in DEBS RPMS
 do
   for DISTRO in ${!PACKTYPE}
