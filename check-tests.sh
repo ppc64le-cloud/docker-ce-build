@@ -57,7 +57,9 @@ echo "Nb of distros : ${NB_DISTROS}"
 if [[ ${NB_BUILD_LOGS} == ${NB_DISTROS} ]] && [[ ${NB_TEST_LOGS} == ${NB_DISTROS} ]]
 then
     echo "~ Check the file ~"
-    TOTAL_ERRORS=`grep -c '1' ${PATH_TEST_ERRORS}`
+    PACKAGE_INSTALL_ERRORS=$(grep -c "TestDistroInstallPackage : 1" ${PATH_TEST_ERRORS})
+    PACKAGE_CHECK_ERRORS=$(grep -c "TestDistroPackageCheck : 1" ${PATH_TEST_ERRORS})
+    TOTAL_ERRORS=$(($PACKAGE_INSTALL_ERRORS + $PACKAGE_CHECK_ERRORS))
     echo "Total errors : ${TOTAL_ERRORS}"
     if [[ ${TOTAL_ERRORS} -eq 0 ]]
     then
@@ -96,7 +98,9 @@ else
             fi
         done
         TOTAL_MISSING=`grep -c 'missing' ${PATH_TEST_ERRORS}`
-        TOTAL_ERRORS=`grep -c 1 ${PATH_TEST_ERRORS}`
+        PACKAGE_INSTALL_ERRORS=$(grep -c "TestDistroInstallPackage : 1" ${PATH_TEST_ERRORS})
+        PACKAGE_CHECK_ERRORS=$(grep -c "TestDistroPackageCheck : 1" ${PATH_TEST_ERRORS})
+        TOTAL_ERRORS=$(($PACKAGE_INSTALL_ERRORS + $PACKAGE_CHECK_ERRORS))
         echo "There are ${TOTAL_MISSING} test log files missing and there are ${TOTAL_ERRORS} errors for the existing test log files."
         # Push error
         exit 1
