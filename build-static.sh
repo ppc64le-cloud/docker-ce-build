@@ -20,22 +20,6 @@ then
   echo "RUNC_VERS = ${RUNC_VERS}"
 fi
 
-##
-# Patch GO image so that we use bullseye instead of buster which is EOL
-##
-patchGoVersion() {
-  MKFILE_PATH=$1/Makefile
-
-  echo "Patching GO image from buster to bullseye for $MKFILE_PATH"
-  sed -ri  's/GO_VERSION\)\-buster/GO_VERSION\)\-bullseye/' $MKFILE_PATH
-}
-
-patchGoVersion docker-ce-packaging/deb
-patchGoVersion docker-ce-packaging/rpm
-
-echo "Search for buster anywhere"
-grep -r buster *
-
 echo "~~ Building static binaries ~~"
 pushd docker-ce-packaging/static
 
