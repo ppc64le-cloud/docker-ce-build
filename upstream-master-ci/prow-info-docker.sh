@@ -11,7 +11,7 @@ REPO_NAME="docker-ce-build"
 PATH_SCRIPTS="/home/prow/go/src/github.com/${REPO_OWNER}/${REPO_NAME}"
 echo DATE=\"${DATE}\" 2>&1 | tee ${PATH_SCRIPTS}/env/date.list
 
-echo "Prow Job to run CI tests on the Docker packages"
+echo "Prow Job to check the kernel's configuration as a part of CI checks"
 
 ${PWD}/dockerctl.sh start
 
