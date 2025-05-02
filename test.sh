@@ -130,27 +130,19 @@ BUILD_ARGS+=" --build-arg GO_VERSION=${GO_VERSION}"
 
   echo "### # Building the test image: ${IMAGE_NAME} # ###"
   # Building the test image
-  if [[ "${DISTRO_NAME}:${DISTRO_VERS}" == centos:8 ]]; then
+  if [[ "${DISTRO_NAME}:${DISTRO_VERS}" == centos:9 ]]; then
     ##
-    # Switch to quay.io for CentOS 8 stream
-    # See https://github.com/docker/containerd-packaging/pull/263
-    # See https://github.com/docker-library/official-images/pull/11831
-    ##
-    echo "Temporary fix: patching Dockerfile for using CentOS 8 stream and quay.io "
-    sed -i 's/FROM ppc64le.*/FROM quay.io\/centos\/centos\:stream8/g' Dockerfile
-  elif [[ "${DISTRO_NAME}:${DISTRO_VERS}" == centos:9 ]]; then
-    ##
-    # Switch to quay.io for CentOS 8 stream
+    # Switch to quay.io for CentOS 9 stream
     # See https://github.com/docker/containerd-packaging/pull/283
     ##
     echo "Temporary fix: patching Dockerfile for using CentOS 9 stream and quay.io "
-    sed -i 's/FROM ppc64le.*/FROM quay.io\/centos\/centos\:stream9/g' Dockerfile
+    sed -i 's/FROM public.ecr.aws.*/FROM quay.io\/centos\/centos\:stream9/g' Dockerfile
   elif [[ "${DISTRO_NAME}:${DISTRO_VERS}" == centos:10 ]]; then
     ##
     # Switch to quay.io for CentOS 10 stream
     ##
     echo "Temporary fix: patching Dockerfile for using CentOS 10 stream and quay.io "
-    sed -i 's/FROM ppc64le.*/FROM quay.io\/centos\/centos\:stream10/g' Dockerfile
+    sed -i 's/FROM public.ecr.aws.*/FROM quay.io\/centos\/centos\:stream10/g' Dockerfile
   fi
  
   BUILD_ARGS+=" --build-arg DISTRO_NAME=${DISTRO_NAME} --build-arg DISTRO_VERS=${DISTRO_VERS}"
