@@ -66,49 +66,50 @@ patchDockerFiles() {
 # $1 : distro
 # $2 : DEBS or RPMS
 buildDocker() {
-  echo "= Building docker for $1 ="
-  local build_before=$SECONDS
-  local DISTRO=$1
-  local PACKTYPE=$2
-  local PACKTYPE_TMP=${PACKTYPE,,}
-  local DIR=${PACKTYPE_TMP:0:3}
-  cd /workspace/docker-ce-packaging/${DIR} && VERSION=${DOCKER_TAG} make ${DIR}build/bundles-ce-${DISTRO}-ppc64le.tar.gz &> ${DIR_LOGS}/build_docker_${DISTRO}.log
+  # echo "= Building docker for $1 ="
+  # local build_before=$SECONDS
+  # local DISTRO=$1
+  # local PACKTYPE=$2
+  # local PACKTYPE_TMP=${PACKTYPE,,}
+  # local DIR=${PACKTYPE_TMP:0:3}
+  # cd /workspace/docker-ce-packaging/${DIR} && VERSION=${DOCKER_TAG} make ${DIR}build/bundles-ce-${DISTRO}-ppc64le.tar.gz &> ${DIR_LOGS}/build_docker_${DISTRO}.log
 
-  # Check if the dynamic docker package has been built
-  if test -f ${DIR}build/bundles-ce-${DISTRO}-ppc64le.tar.gz
-  then
-    echo "Docker for ${DISTRO} built"
+  # # Check if the dynamic docker package has been built
+  # if test -f ${DIR}build/bundles-ce-${DISTRO}-ppc64le.tar.gz
+  # then
+  #   echo "Docker for ${DISTRO} built"
 
-    echo "== Copying dynamic docker package bundles-ce-${DISTRO}-ppc64le.tar.gz to ${DIR_DOCKER} =="
-    cp -r ${DIR}build/bundles-ce-${DISTRO}-ppc64le.tar.gz ${DIR_DOCKER}
+  #   echo "== Copying dynamic docker package bundles-ce-${DISTRO}-ppc64le.tar.gz to ${DIR_DOCKER} =="
+  #   cp -r ${DIR}build/bundles-ce-${DISTRO}-ppc64le.tar.gz ${DIR_DOCKER}
 
-    echo "== Copying dynamic docker package bundles-ce-${DISTRO}-ppc64le.tar.gz to ${DIR_DOCKER_COS} =="
-    cp -r ${DIR}build/bundles-ce-${DISTRO}-ppc64le.tar.gz ${DIR_DOCKER_COS}
+  #   echo "== Copying dynamic docker package bundles-ce-${DISTRO}-ppc64le.tar.gz to ${DIR_DOCKER_COS} =="
+  #   cp -r ${DIR}build/bundles-ce-${DISTRO}-ppc64le.tar.gz ${DIR_DOCKER_COS}
 
-    echo "== Copying log to ${DIR_LOGS_COS} =="
-    cp ${DIR_LOGS}/build_docker_${DISTRO}.log ${DIR_LOGS_COS}/build_docker_${DISTRO}.log
+  #   echo "== Copying log to ${DIR_LOGS_COS} =="
+  #   cp ${DIR_LOGS}/build_docker_${DISTRO}.log ${DIR_LOGS_COS}/build_docker_${DISTRO}.log
 
-    # Checking everything has been copied
-    if test -f ${DIR_DOCKER}/bundles-ce-${DISTRO}-ppc64le.tar.gz && test -f ${DIR_DOCKER_COS}/bundles-ce-${DISTRO}-ppc64le.tar.gz && test -f ${DIR_LOGS_COS}/build_docker_${DISTRO}.log
-    then
-      echo "Docker for ${DISTRO} was copied."
-    else
-      echo "Docker for ${DISTRO} was not copied."
-    fi
-  else
-    echo "ERROR: Docker for ${DISTRO} not built"
+  #   # Checking everything has been copied
+  #   if test -f ${DIR_DOCKER}/bundles-ce-${DISTRO}-ppc64le.tar.gz && test -f ${DIR_DOCKER_COS}/bundles-ce-${DISTRO}-ppc64le.tar.gz && test -f ${DIR_LOGS_COS}/build_docker_${DISTRO}.log
+  #   then
+  #     echo "Docker for ${DISTRO} was copied."
+  #   else
+  #     echo "Docker for ${DISTRO} was not copied."
+  #   fi
+  # else
+  #   echo "ERROR: Docker for ${DISTRO} not built"
 
-    echo "== Copying log to ${DIR_LOGS_COS} =="
-    cp ${DIR_LOGS}/build_docker_${DISTRO}.log ${DIR_LOGS_COS}/build_docker_${DISTRO}.log
+  #   echo "== Copying log to ${DIR_LOGS_COS} =="
+  #   cp ${DIR_LOGS}/build_docker_${DISTRO}.log ${DIR_LOGS_COS}/build_docker_${DISTRO}.log
 
-    echo "== Log start for the build failure of ${DISTRO} =="
-    cat ${DIR_LOGS}/build_docker_${DISTRO}.log
-    echo "== Log end for the build failure of ${DISTRO} =="
+  #   echo "== Log start for the build failure of ${DISTRO} =="
+  #   cat ${DIR_LOGS}/build_docker_${DISTRO}.log
+  #   echo "== Log end for the build failure of ${DISTRO} =="
 
-  fi
+  # fi
 
-  local build_after=$SECONDS
-  local build_duration=$(expr $build_after - $build_before) && echo "DURATION BUILD docker ${DISTRO} : $(($build_duration / 60)) minutes and $(($build_duration % 60)) seconds elapsed."
+  # local build_after=$SECONDS
+  # local build_duration=$(expr $build_after - $build_before) && echo "DURATION BUILD docker ${DISTRO} : $(($build_duration / 60)) minutes and $(($build_duration % 60)) seconds elapsed."
+  docker images
 }
 
 echo "# Building dynamic docker packages #"
@@ -199,7 +200,7 @@ cd /workspace/docker-ce-packaging/static
 
 CONT_NAME=docker-build-static
 # https://quay.io/repository/powercloud/docker-ce-build?tab=tags
-QUAYIO_REPOSITORY="powercloud"
+QUAYIO_REPOSITORY="ahendre3"
 # Test ! Test a new DockerInDocker image before pushing it to Raji's Production Cluster
 # https://quay.io/repository/trex58i/docker-ce-build?tab=tags
 #QUAYIO_REPOSITORY="trex58i"
@@ -223,56 +224,56 @@ echo "docker run -d \
            quay.io/${QUAYIO_REPOSITORY}/docker-ce-build@${DIND_IMG_STATIC_HASH} \
            ${PATH_SCRIPTS}/build-static.sh"
            
-docker run -d \
-           -v /workspace:/workspace \
-           -v ${PATH_SCRIPTS}:${PATH_SCRIPTS} \
-           -v ${ARTIFACTS}:${ARTIFACTS} \
-           --env PATH_SCRIPTS \
-           ${DOCKER_SECRET_AUTH_IN_ENV} \
-           --privileged \
-           --name ${CONT_NAME} \
-           quay.io/${QUAYIO_REPOSITORY}/docker-ce-build@${DIND_IMG_STATIC_HASH} \
-           ${PATH_SCRIPTS}/build-static.sh
+# docker run -d \
+#            -v /workspace:/workspace \
+#            -v ${PATH_SCRIPTS}:${PATH_SCRIPTS} \
+#            -v ${ARTIFACTS}:${ARTIFACTS} \
+#            --env PATH_SCRIPTS \
+#            ${DOCKER_SECRET_AUTH_IN_ENV} \
+#            --privileged \
+#            --name ${CONT_NAME} \
+#            quay.io/${QUAYIO_REPOSITORY}/docker-ce-build@${DIND_IMG_STATIC_HASH} \
+#            ${PATH_SCRIPTS}/build-static.sh
 
-status_code="$(docker container wait ${CONT_NAME})"
-if [[ ${status_code} -ne 0 ]]; then
-  # Save static build logs
-  echo "==== Copying static log to ${DIR_LOGS_COS}/${STATIC_LOG} ===="
-  cp ${DIR_LOGS}/${STATIC_LOG} ${DIR_LOGS_COS}/${STATIC_LOG}
+# status_code="$(docker container wait ${CONT_NAME})"
+# if [[ ${status_code} -ne 0 ]]; then
+#   # Save static build logs
+#   echo "==== Copying static log to ${DIR_LOGS_COS}/${STATIC_LOG} ===="
+#   cp ${DIR_LOGS}/${STATIC_LOG} ${DIR_LOGS_COS}/${STATIC_LOG}
   
-  # Note: Messages from build-static.sh and build-docker.sh are not always echoed by "docker logs" in temporal order
-  echo "The static binaries build failed. See details from '${STATIC_LOG}'"
-  docker logs ${CONT_NAME}
-else
-  after_build=$SECONDS
-  duration_build=$(expr $after_build - $before_build)
-  echo "DURATION BUILD STATIC : $(($duration_build / 60)) minutes and $(($duration_build % 60)) seconds elapsed."
-  docker logs ${CONT_NAME}
+#   # Note: Messages from build-static.sh and build-docker.sh are not always echoed by "docker logs" in temporal order
+#   echo "The static binaries build failed. See details from '${STATIC_LOG}'"
+#   docker logs ${CONT_NAME}
+# else
+#   after_build=$SECONDS
+#   duration_build=$(expr $after_build - $before_build)
+#   echo "DURATION BUILD STATIC : $(($duration_build / 60)) minutes and $(($duration_build % 60)) seconds elapsed."
+#   docker logs ${CONT_NAME}
 
-  # Check if the static packages have been built
-  if test -f build/linux/tmp/docker-ppc64le.tgz
-  then
-    echo "Static binaries built"
+#   # Check if the static packages have been built
+#   if test -f build/linux/tmp/docker-ppc64le.tgz
+#   then
+#     echo "Static binaries built"
 
-    echo "== Copying static packages to ${DIR_DOCKER} =="
-    cp build/linux/tmp/*.tgz ${DIR_DOCKER}
+#     echo "== Copying static packages to ${DIR_DOCKER} =="
+#     cp build/linux/tmp/*.tgz ${DIR_DOCKER}
 
-    echo "=== Copying static packages to ${DIR_DOCKER_COS} ==="
-    cp build/linux/tmp/*.tgz ${DIR_DOCKER_COS}
+#     echo "=== Copying static packages to ${DIR_DOCKER_COS} ==="
+#     cp build/linux/tmp/*.tgz ${DIR_DOCKER_COS}
 
-    echo "==== Copying static log to ${DIR_LOGS_COS}/${STATIC_LOG} ===="
-    cp ${DIR_LOGS}/${STATIC_LOG} ${DIR_LOGS_COS}/${STATIC_LOG}
+#     echo "==== Copying static log to ${DIR_LOGS_COS}/${STATIC_LOG} ===="
+#     cp ${DIR_LOGS}/${STATIC_LOG} ${DIR_LOGS_COS}/${STATIC_LOG}
 
-    # Checking everything has been copied
-    ls -f ${DIR_DOCKER}/*.tgz && ls -f ${DIR_DOCKER_COS}/*.tgz && ls -f ${DIR_LOGS_COS}/${STATIC_LOG}
-    if [[ $? -eq 0 ]]
-    then
-      echo "The static binaries were copied."
-    else
-      echo "The static binaries were not copied."
-    fi
-  fi
-fi
+#     # Checking everything has been copied
+#     ls -f ${DIR_DOCKER}/*.tgz && ls -f ${DIR_DOCKER_COS}/*.tgz && ls -f ${DIR_LOGS_COS}/${STATIC_LOG}
+#     if [[ $? -eq 0 ]]
+#     then
+#       echo "The static binaries were copied."
+#     else
+#       echo "The static binaries were not copied."
+#     fi
+#   fi
+# fi
 
 cd /workspace
 

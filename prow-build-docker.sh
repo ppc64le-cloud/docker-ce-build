@@ -28,6 +28,7 @@ ${PATH_SCRIPTS}/get-env.sh
 set -o allexport
 source env.list
 
+chmod ug+x ${PATH_SCRIPTS}/prereq-images/build-docker.sh && ${PATH_SCRIPTS}/prereq-images/build-docker.sh
 # Build dynamic docker packages
 echo "*** Build ***"
 ${PATH_SCRIPTS}/build-docker.sh
