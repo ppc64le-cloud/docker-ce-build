@@ -7,7 +7,7 @@ FROM public.ecr.aws/docker/library/debian:bookworm
 
 ENV CONTAINERD_VERSION=1.7.27-1
 
-ENV DOCKER_VERSION=28.1.0-1
+ENV DOCKER_VERSION=28.2.1-1
 
 WORKDIR /workspace
 RUN mkdir -p /workspace
@@ -53,7 +53,7 @@ curl https://download.docker.com/linux/debian/dists/bookworm/pool/stable/amd64/d
 curl https://download.docker.com/linux/debian/dists/bookworm/pool/stable/ppc64el/containerd.io_${CONTAINERD_VERSION}_ppc64el.deb -o /workspace/tmp/containerd.io_${CONTAINERD_VERSION}_ppc64el.deb; \
 curl https://download.docker.com/linux/debian/dists/bookworm/pool/stable/ppc64el/docker-ce-cli_${DOCKER_VERSION}~debian.12~bookworm_ppc64el.deb -o /workspace/tmp/docker-ce-cli_${DOCKER_VERSION}~debian.12~bookworm_ppc64el.deb; \
 curl https://download.docker.com/linux/debian/dists/bookworm/pool/stable/ppc64el/docker-ce_${DOCKER_VERSION}~debian.12~bookworm_ppc64el.deb -o /workspace/tmp/docker-ce_${DOCKER_VERSION}~debian.12~bookworm_ppc64el.deb; \
-curl https://download.docker.com/linux/debian/dists/bookworm/pool/stable/ppc64el/docker-buildx-plugin_0.12.1-1~debian.12~bookworm_ppc64el.deb -o /workspace/tmp/docker-buildx-plugin_0.10.5-1~debian.12~bookworm_ppc64el.deb; \
+curl https://download.docker.com/linux/debian/dists/bookworm/pool/stable/ppc64el/docker-buildx-plugin_0.24.0-1~debian.12~bookworm_ppc64el.deb -o /workspace/tmp/docker-buildx-plugin_0.24.0-1~debian.12~bookworm_ppc64el.deb; \
 ;; \
     esac; \
     \
@@ -83,7 +83,8 @@ chmod +x /usr/local/bin/dind; \
     chmod +x /usr/local/bin/dockerd-entrypoint.sh; \
 cp $(which tini) "/usr/local/bin/docker-init";
 
-RUN mkdir -p /etc/docker; touch /etc/docker/daemon.json; echo "{\"insecure-registries\" : [ \"registry:5000\" ]}" > /etc/docker/daemon.json;
+# Re-enable when enabling CI
+# RUN mkdir -p /etc/docker; touch /etc/docker/daemon.json; echo "{\"insecure-registries\" : [ \"registry:5000\" ]}" > /etc/docker/daemon.json;
 
 
 VOLUME /var/lib/docker

@@ -50,7 +50,7 @@ export GOPATH=${WORKSPACE}/test:/go
 export PATH="/workspace/test/bin:$PATH"
 export GO111MODULE=auto
 cd /workspace/test/src/github.ibm.com/powercloud/dockertest
-go install gotest.tools/gotestsum@v1.7.0
+go install gotest.tools/gotestsum@v1.12.3
 
 echo "* Go version:"
 go version
