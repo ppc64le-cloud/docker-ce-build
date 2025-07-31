@@ -39,10 +39,10 @@ RUN set -eux; \
 	echo 'dockremap:165536:65536' >> /etc/subuid; \
 	echo 'dockremap:165536:65536' >> /etc/subgid
 
-# Commit pointing to the latest Docker-in-Docker script as of May, 2025.
+# Commit pointing to the latest Docker-in-Docker script as of July, 2025.
 # https://github.com/moby/moby/tree/master/hack/dind
 ARG DIND_COMMIT=8d9e3502aba39127e4d12196dae16d306f76993d
-# Commit pointing to the latest stable Dockerd-entrypoint script as of May, 2025.
+# Commit pointing to the latest stable Dockerd-entrypoint script as of July, 2025.
 # https://github.com/docker-library/docker/tree/master/28/dind
 ARG DOCKERD_COMMIT=52c8bfa9869c9c5605c6c03dc9a82cfe426ace77
 ARG TINI_VERSION=v0.19.0
@@ -63,7 +63,7 @@ RUN set -eux; \
         popd; \
         chmod +x /usr/local/bin/test-launch.sh;
 
-ARG GO_VERSION=1.24.3
+ARG GO_VERSION=1.24.5
 
 RUN set -eux; \
     url="https://dl.google.com/go/${GO_VERSION}";\
