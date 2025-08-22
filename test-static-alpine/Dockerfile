@@ -1,4 +1,4 @@
-FROM public.ecr.aws/docker/library/golang:1.24.5-alpine3.22
+FROM public.ecr.aws/docker/library/golang:1.25.0-alpine3.22
 
 WORKDIR /workspace
 ENV WORKSPACE=/workspace \
