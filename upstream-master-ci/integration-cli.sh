@@ -11,7 +11,7 @@ sed -i 's/ADD --chmod=0755 https:\/\/github.com\/theupdateframework\/notary\/rel
 
 # The below replacements are needed because the 'Docker' image is
 # not supported on ppc64le hence we maintain our own.
-sed -i "s/docker:.*/quay.io\/powercloud\/docker-ce-build@sha256:ecb898a3ce053b49c21e06cb7c762017d1b0f8ec87dade76c52324c5566b5f30'/g" ./e2e/compose-env.yaml
+sed -i "s/docker:.*/quay.io\/powercloud\/docker-ce-build@sha256:aee7cedb268386043d9d081e9c332ffa271b696b94db3651788cd971de775455'/g" ./e2e/compose-env.yaml
 sed -i "/insecure-registry/d" ./e2e/compose-env.yaml
 TEST_DEBUG="true"
 echo "Integration CLI test flags:"
