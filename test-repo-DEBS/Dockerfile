@@ -31,6 +31,7 @@ RUN apt-get -y update && apt-get -y upgrade && DEBIAN_FRONTEND="noninteractive" 
     libc-dev\
     procps\
     tini \
+    nftables \
     iptables libdevmapper1.02.1 && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get -y clean
