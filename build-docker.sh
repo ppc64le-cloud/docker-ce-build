@@ -62,6 +62,17 @@ patchDockerFiles() {
   done
 }
 
+# model-cli repository has been changed to model-runner
+switchModelRepository() {
+  pushd /workspace/docker-ce-packaging
+    sed -i 's|https://github.com/docker/model-cli.git|https://github.com/docker/model-runner.git|' ./common.mk
+    sed -i 's|make -C /go/src/github.com/docker/model-cli|make -C /go/src/github.com/docker/model-cli/cmd/cli|' ./deb/common/rules
+    sed -i 's|mv /go/src/github.com/docker/model-cli/dist/docker-model|mv /go/src/github.com/docker/model-cli/cmd/cli/dist/docker-model|' ./deb/common/rules
+    sed -i 's|make -C ${RPM_BUILD_DIR}/src/model|make -C ${RPM_BUILD_DIR}/src/model/cmd/cli|' ./rpm/SPECS/docker-model-plugin.spec
+    sed -i 's|0755 ${RPM_BUILD_DIR}/src/model|0755 ${RPM_BUILD_DIR}/src/model/cmd/cli|' ./rpm/SPECS/docker-model-plugin.spec
+  popd
+}
+
 # Function to build docker packages
 # $1 : distro
 # $2 : DEBS or RPMS
@@ -118,6 +129,8 @@ patchDockerFiles .
 cd /workspace/docker-ce-packaging/rpm
 patchDockerFiles .
 cd /workspace
+
+switchModelRepository
 
 before=$SECONDS
 # 1) Build the list of distros
