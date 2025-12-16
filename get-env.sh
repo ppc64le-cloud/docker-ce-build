@@ -17,6 +17,19 @@ FILE_ENV_PATH="${PATH_SCRIPTS}/env"
 FILE_ENV="env.list"
 DISABLE_DISTRO_DISCOVERY=0
 
+# model-cli repository has been changed to model-runner
+switchModelRepository() {
+  pushd /workspace/docker-ce-packaging
+    sed -i 's|https://github.com/docker/model-cli.git|https://github.com/docker/model-runner.git|' ./common.mk
+    sed -i 's|make -C /go/src/github.com/docker/model-cli|make -C /go/src/github.com/docker/model-cli/cmd/cli|' ./deb/common/rules
+    sed -i 's|mv /go/src/github.com/docker/model-cli/dist/docker-model|mv /go/src/github.com/docker/model-cli/cmd/cli/dist/docker-model|' ./deb/common/rules
+    sed -i 's|make -C ${RPM_BUILD_DIR}/src/model|make -C ${RPM_BUILD_DIR}/src/model/cmd/cli|' ./rpm/SPECS/docker-model-plugin.spec
+    sed -i 's|0755 ${RPM_BUILD_DIR}/src/model|0755 ${RPM_BUILD_DIR}/src/model/cmd/cli|' ./rpm/SPECS/docker-model-plugin.spec
+    sed -i '2iDOCKER_MODEL_REF := $(shell echo "$(DOCKER_MODEL_REF)" | cut -c9-)' ./deb/Makefile
+    sed -i '2iDOCKER_MODEL_REF := $(shell echo "$(DOCKER_MODEL_REF)" | cut -c9-)' ./rpm/Makefile
+  popd
+}
+
 # Mount the COS bucket if not mounted
 if ! test -d ${PATH_COS}/s3_${COS_BUCKET_PRIVATE}
 then
@@ -56,6 +69,8 @@ git init
 git remote add origin https://github.com/docker/docker-ce-packaging.git
 git fetch origin ${DOCKER_PACKAGING_HASH}
 git checkout FETCH_HEAD
+
+switchModelRepository
 
 make REF=${DOCKER_TAG} checkout
 popd
