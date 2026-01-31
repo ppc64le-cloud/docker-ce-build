@@ -1,4 +1,4 @@
-FROM public.ecr.aws/docker/library/golang:1.25.0-alpine3.22
+FROM public.ecr.aws/docker/library/golang:1.25.5-alpine3.22
 
 WORKDIR /workspace
 ENV WORKSPACE=/workspace \
@@ -56,13 +56,13 @@ ENV MODPROBE_COMMIT 387e351394bfad74bceebf8303c6c8e39c3d4ed4
 # https://github.com/docker/docker/tree/master/hack/dind
 ENV DIND_COMMIT 8d9e3502aba39127e4d12196dae16d306f76993d
 # ENV DIND_COMMIT 8d9e3502aba39127e4d12196dae16d306f76993d
-ENV DOCKERD_COMMIT 52c8bfa9869c9c5605c6c03dc9a82cfe426ace77
-# ENV DOCKERD_COMMIT 52c8bfa9869c9c5605c6c03dc9a82cfe426ace77
+ENV DOCKERD_COMMIT 319e58aa0299128924649f0745054a1b8732545a
+# ENV DOCKERD_COMMIT 319e58aa0299128924649f0745054a1b8732545a
 
 RUN set -eux; \
 	wget -O /usr/local/bin/modprobe "https://raw.githubusercontent.com/docker-library/docker/${MODPROBE_COMMIT}/20.10/modprobe.sh"; \
         wget -O /usr/local/bin/dind "https://raw.githubusercontent.com/docker/docker/${DIND_COMMIT}/hack/dind"; \
-        wget -O /usr/local/bin/dockerd-entrypoint.sh "https://raw.githubusercontent.com/docker-library/docker/${DOCKERD_COMMIT}/28/dind/dockerd-entrypoint.sh"; \
+        wget -O /usr/local/bin/dockerd-entrypoint.sh "https://raw.githubusercontent.com/docker-library/docker/${DOCKERD_COMMIT}/29/dind/dockerd-entrypoint.sh"; \
 	chmod +x /usr/local/bin/dind; \
         chmod +x /usr/local/bin/dockerd-entrypoint.sh; \
 	chmod +x /usr/local/bin/test-launch.sh;
