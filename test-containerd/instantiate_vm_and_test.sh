@@ -1,5 +1,6 @@
 #!/bin/bash
 
+ID=""
 SSH_KEY=""
 NAME=""
 NETWORK=""
@@ -26,7 +27,7 @@ EOF
 }
 
 function delete_vm() {
-  if [ -z $1 ]; then echo "Nothing to delete. delete_vm requires the vm ID as an argument."; return; fi
+  if [ -z "${1:-}" ]; then echo "Nothing to delete. delete_vm requires the vm ID as an argument."; return; fi
 
   # Ensure we are yet connected
   echo "" | ibmcloud login
@@ -35,7 +36,7 @@ function delete_vm() {
 }
 
 function delete_network() {
-  if [ -z $1 ]; then echo "Nothing to delete. delete_network requires the network ID as an argument."; return; fi
+  if [ -z "${1:-}" ]; then echo "Nothing to delete. delete_network requires the network ID as an argument."; return; fi
 
   # Ensure we are yet connected
   echo "" | ibmcloud login
@@ -59,6 +60,20 @@ function delete_network() {
   echo "Network delete failed with return code $NET_DEL_EXIT"
   return $NET_DEL_EXIT
 }
+
+function cleanup() {
+  set +e
+  if [ -n "${ID:-}" ]; then
+    echo "Cleaning up VM $ID"
+    delete_vm "$ID"
+    sleep 120
+  fi
+  if [ -n "${NETWORK:-}" ]; then
+    echo "Cleaning up network $NETWORK"
+    delete_network "$NETWORK"
+  fi
+}
+trap cleanup EXIT
 
 # Get options
 while [[ $# != 0 ]]; do
@@ -107,7 +122,7 @@ while [ $i -lt $TIMEOUT ] && [ -z "$(ibmcloud pi instance get $ID | grep 'Extern
   sleep 60
 done
 # Fail to connect
-if [ "$i" == "$TIMEOUT" ]; then echo "FAIL: fail to get IP" ; delete_vm $ID; sleep 120; delete_network $NETWORK; exit 1; fi
+if [ "$i" == "$TIMEOUT" ]; then echo "FAIL: fail to get IP" ; exit 1; fi
 
 IP=$(ibmcloud pi instance get $ID | grep -Eo "External Address:[[:space:]]*[0-9.]+" | cut -d ' ' -f3)
 
@@ -145,8 +160,3 @@ fi
 ssh ubuntu@$IP -i /etc/ssh-volume/containerd-key wget https://raw.githubusercontent.com/ppc64le-cloud/docker-ce-build/main/test-containerd/test_on_powervs.sh
 ssh ubuntu@$IP -i /etc/ssh-volume/containerd-key sudo bash test_on_powervs.sh $RUNC_FLAVOR $TEST_RUNTIME
 scp -i /etc/ssh-volume/containerd-key "ubuntu@$IP:/home/containerd_test/containerd/*.xml" ${OUTPUT}
-
-delete_vm $ID
-sleep 120
-delete_network $NETWORK
-
