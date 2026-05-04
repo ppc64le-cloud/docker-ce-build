@@ -10,7 +10,6 @@ ARG DISTRO_VERS
 
 WORKDIR /workspace
 RUN mkdir -p /workspace
-ARG TINI_VERSION=v0.19.0
 ENV WORKSPACE=/workspace \
     TERM=xterm
 ENV PATH /usr/local/go/bin:$PATH
@@ -55,14 +54,13 @@ RUN set -eux; \
         chmod +x /usr/local/bin/dockerd-entrypoint.sh; \
         git clone https://github.com/krallin/tini.git "/workspace/tini"; \
         pushd ./tini; \
-        git checkout -q "$TINI_VERSION"; \
         cmake .; \
         make tini-static; \
         cp tini-static "/usr/local/bin/docker-init"; \
         popd; \
         chmod +x /usr/local/bin/test-launch.sh;
 
-ARG GO_VERSION=1.25.5
+ARG GO_VERSION=1.26.2
 
 RUN set -eux; \
     url="https://dl.google.com/go/${GO_VERSION}";\
