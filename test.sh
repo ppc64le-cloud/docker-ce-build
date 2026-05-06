@@ -66,7 +66,6 @@ testDynamicPackages() {
   local DIND_COMMIT_RPMS_HASH="${DIND_COMMIT_RPMS_HASH}"
   local DOCKERD_COMMIT_DEBS_HASH="${DOCKERD_COMMIT_DEBS_HASH}"
   local DOCKERD_COMMIT_RPMS_HASH="${DOCKERD_COMMIT_RPMS_HASH}"
-  local TINI_VERSION="${TINI_VERSION}"
   export DISTRO_NAME
   export DISTRO_VERS
 
@@ -125,7 +124,7 @@ BUILD_ARGS+=" --build-arg GO_VERSION=${GO_VERSION}"
   if [[ ${PACKTYPE} == "DEBS" ]];then 
       BUILD_ARGS+=" --build-arg DIND_COMMIT=${DIND_COMMIT_DEBS_HASH} --build-arg DOCKERD_COMMIT=${DOCKERD_COMMIT_DEBS_HASH}"
   elif [[ ${PACKTYPE} == "RPMS" ]];then
-      BUILD_ARGS+=" --build-arg DIND_COMMIT=${DIND_COMMIT_RPMS_HASH} --build-arg DOCKERD_COMMIT=${DOCKERD_COMMIT_RPMS_HASH} --build-arg TINI_VERSION=${TINI_VERSION}"
+      BUILD_ARGS+=" --build-arg DIND_COMMIT=${DIND_COMMIT_RPMS_HASH} --build-arg DOCKERD_COMMIT=${DOCKERD_COMMIT_RPMS_HASH}"
   fi
 
   echo "### # Building the test image: ${IMAGE_NAME} # ###"

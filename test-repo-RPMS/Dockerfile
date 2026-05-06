@@ -15,7 +15,6 @@ RUN mkdir -p /workspace
 ENV WORKSPACE=/workspace \
     TERM=xterm
 ENV PATH /usr/local/go/bin:$PATH
-ARG TINI_VERSION=v0.19.0
 RUN yum install -y dnf-plugins-core || :; \
     yum config-manager --set-enabled crb || :; \
     yum config-manager --set-enabled powertools || :; \
@@ -45,7 +44,6 @@ ARG DIND_COMMIT=8d9e3502aba39127e4d12196dae16d306f76993d
 # Commit pointing to the latest stable Dockerd-entrypoint script as of December, 2025.
 # https://github.com/docker-library/docker/tree/master/29/dind
 ARG DOCKERD_COMMIT=319e58aa0299128924649f0745054a1b8732545a
-ARG TINI_VERSION=v0.19.0
 
 COPY test-launch.sh /usr/local/bin/test-launch.sh
 
@@ -56,14 +54,13 @@ RUN set -eux; \
         chmod +x /usr/local/bin/dockerd-entrypoint.sh; \
         git clone https://github.com/krallin/tini.git "/workspace/tini"; \
         pushd ./tini; \
-        git checkout -q "$TINI_VERSION"; \
         cmake .; \
         make tini-static; \
         cp tini-static "/usr/local/bin/docker-init"; \
         popd; \
         chmod +x /usr/local/bin/test-launch.sh;
 
-ARG GO_VERSION=1.25.5
+ARG GO_VERSION=1.26.2
 
 RUN set -eux; \
     url="https://dl.google.com/go/${GO_VERSION}";\
