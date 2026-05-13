@@ -122,7 +122,7 @@ if [[ -z "$NETWORK" ]]; then
   exit 1
 fi
 
-ID=$(ibmcloud pi instance create $NAME --image ubuntu_2204_tier1 --key-name $SSH_KEY --memory 8 --processor-type shared --processors '0.5' --subnets $NETWORK --storage-tier tier1 | grep -m 1 ID | awk '{print $2}') || true
+ID=$(ibmcloud pi instance create $NAME --image ubuntu_2404_tier1 --key-name $SSH_KEY --memory 8 --processor-type shared --processors '0.5' --subnets $NETWORK --storage-tier tier1 | grep -m 1 ID | awk '{print $2}') || true
 
 # Wait it is registred
 sleep 120
