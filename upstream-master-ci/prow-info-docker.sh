@@ -22,10 +22,20 @@ chmod ug+x ${PATH_CI}/get-env-ci.sh && ${PATH_CI}/get-env-ci.sh
 echo "*** Check Kernel Config ***"
 chmod ug+x ${PATH_CI}/info.sh
 ${PATH_CI}/info.sh
+REPO_OWNER=ppc64le-cloud
+REPO_NAME=docker-ce-build
+TRACKING_REPO=${REPO_OWNER}/${REPO_NAME}
+TRACKING_BRANCH=prow-job-tracking
+FILE_TO_PUSH=job/${JOB_NAME}
 
 if [[ $? == 0 ]]; then 
-    chmod ug+x ./setup-pj-trigger.sh
-    ./setup-pj-trigger.sh -r ppc64le-cloud/docker-ce-build -s ${PATH_SCRIPTS}/env/date.list
+    chmod ug+x ./trigger-prow-job-from-git.sh
+    ./trigger-prow-job-from-git.sh -r ${TRACKING_REPO} \
+    -b ${TRACKING_BRANCH} -s ${PWD}/env/date.list -d ${FILE_TO_PUSH}
+    if [[ $? != 0 ]]; then
+        echo "Failed to add the git commit to trigger the next job"
+        exit 3
+    fi
 else
     if [[ $? == 1 ]]; then
         echo "Error checking the kernel configuration"
